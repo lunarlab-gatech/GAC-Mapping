@@ -103,7 +103,35 @@ conda activate patchnetvlad
 pip install pyyaml rospy rospkg
 ```
 
+## Docker Installation
 
+Make sure to install:
+- [Docker](https://docs.docker.com/engine/install/ubuntu/)
+
+Then, create the ros workspace with the `src` folder, and then navigate the terminal to that `src` folder. _Creating the workspace outside the docker helps you keep your files and changes within the workspace even if you delete the un-committed docker container._ Then, clone this repository into the `src` folder.
+
+After that, navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, edit the `enter_container.sh` script with the following paths:
+- `DATA_DIR=`: The directory where the HERCULES dataset is located
+- `WS_DIR=`: The directory of the ROS workspace
+
+Now, run the following commands:
+```
+build_container.sh
+run_container.sh
+```
+
+To re-enter the container, run the following command:
+```
+enter_container.sh
+```
+
+### Build
+
+Run the following command in the root of the ROS workspace to build the package:
+
+```
+# TODO: Write me based on #2 below and any other necessary commands!
+```
 
 <a name="build_GACM_on_ROS"></a>
 
