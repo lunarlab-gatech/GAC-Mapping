@@ -4,106 +4,11 @@
 
 **Version 1.1.0**
 
-new: Organize the code and documents; Use Patch-NetVLAD instead of NetVLAD for loop detect; Fix bugs and standardize algorithm input and output.
-
-
-
 ***GAC-Mapping (GACM for short)*** is a multi-session SLAM to solve the mapping and localization of ground-aerial heterogeneous robot clusters in urban scenes. In GACM, a **Visual-LiDAR** ego-motion estimation module that considers point, line and planar constraints can provide robust odometry information. Thumbnail images representing obstacle outlines are generated and descriptors are extracted using a neural network to help perform data association between separate runs. Map segments and the robot poses are organized together and are updated during a pose graph optimization procedure. We provide guidance and examples how to run GACM on sample data and GrAco dataset ([website](https://sites.google.com/view/graco-dataset) or [github](https://github.com/SYSU-RoboticsLab/GrAco)).
 
-<div align="center">
-    <img src="./doc/groundAerialMapping.png" style="zoom:48%;" />
-</div>
 
-**Viedo (Replay: X6)**
-
-<div align="center">
-	<img src="./doc/gacm.gif" />
-</div>
-
-**Contributors**
-
-[Jinhao He 何晋豪](https://github.com/David-Willo)，Yuming Zhou 周榆明，Lixiang Huang 黄立祥，[Yang Kong 孔阳](https://github.com/JoenHune)，[Yilin Zhu 朱奕霖 (version 1.1.0 author)](https://github.com/inntoy) ，[Cheng Hui 成慧](https://cse.sysu.edu.cn/content/2504) from [SYSU RAPID Lab](http://lab.sysu-robotics.com/index.html)
-
-**Related Papers**
-
-* Jinhao He, Yuming Zhou, Lixiang Huang, Yang Kong, Hui Cheng\*, “**[Ground and Aerial Collaborative Mapping in Urban Environments](https://ieeexplore.ieee.org/document/9234707)**,”IEEE Robotics and Automation Letters, pp. 95-102, Oct, 2020
-
-If our work has helped you, please cite:
-
-```
-@article{DBLP:journals/ral/HeZHKC21,
-  author    = {Jinhao He and
-               Yuming Zhou and
-               Lixiang Huang and
-               Yang Kong and
-               Hui Cheng},
-  title     = {Ground and Aerial Collaborative Mapping in Urban Environments},
-  journal   = {{IEEE} Robotics Autom. Lett.},
-  volume    = {6},
-  number    = {1},
-  pages     = {95--102},
-  year      = {2021}
-}
-```
-
-## Index
-
-1. [Prerequisites](#Prerequisites)
-2. [Build GACM on ROS](#build_GACM_on_ROS)
-3. [Run GACM on datasets](#run_GACM_dataset)
-   - [Operation process](#operation_process)
-   - [Sample Data](#sample_data)
-   - [GrAco Dataset](#GrAco_dataset)
-4. [Run GACM on your own device](#run_GACM_own)
-   - [Prepare device](#prepare_device)
-   - [Prepare file](#prepare_file)
-   - [Output file](#output_file)
-   - [Known issues](#known_issues)
-5. [Acknowledgements](#Acknowledgements)
-6. [License](#License)
-
-
-
-<a name="Prerequisites"></a>
-
-
-## 1. Prerequisites 
-1.1 **Ubuntu** and **ROS**
-
-Ubuntu  18.04.
-ROS Melodic. [ROS Installation](http://wiki.ros.org/cn/ROS/Installation)
-additional ROS pacakge
-
-```bash
-sudo apt install ros-$ROS_DISTRO-cv-bridge ros-$ROS_DISTRO-tf ros-$ROS_DISTRO-message-filters ros-$ROS_DISTRO-image-transport
-```
-
-1.2 **Ceres Solver**
-
-Test Version are 1.14.0 and 2.0.0. Follow [Ceres Installation](http://ceres-solver.org/installation.html), remember to **make install**. 
-(Our testing environment: Ubuntu 18.04, ROS Melodic, OpenCV 3.2.0, Eigen 3.3.4, PCL 1.8.1) 
-
-1.3 **Patch-NetVLAD**
-
-Please refer to [Patch-NetVLAD](https://github.com/QVPR/Patch-NetVLAD) installation process. Our test is in anaconda.
-
-If you need to replace the software source of anaconda, please follow the instructions in this [blog](https://blog.csdn.net/scl52tg/article/details/120959893).
-
-```bash
-# using gpu
-conda create -n patchnetvlad python=3.8 numpy pytorch-gpu torchvision natsort tqdm opencv pillow scikit-learn faiss matplotlib-base -c conda-forge
-# using cpu
-conda create -n patchnetvlad python=3.8 numpy pytorch-cpu torchvision natsort tqdm opencv pillow scikit-learn faiss matplotlib-base -c conda-forge
-```
-
-Install rospy, rospkg and pyyaml by pip.
-
-```bash
-conda activate patchnetvlad
-pip install pyyaml rospy rospkg
-```
-
-## Docker Installation
+## Install
+### Docker Setup
 
 Make sure to install:
 - [Docker](https://docs.docker.com/engine/install/ubuntu/)
@@ -115,13 +20,14 @@ After that, navigate to the `docker` directory. Log in to the user that you want
 - `WS_DIR=`: The directory of the ROS workspace
 
 Now, run the following commands:
-```
+```bash
 build_container.sh
 run_container.sh
 ```
 
-To re-enter the container, run the following command:
-```
+The rest of this README **assumes that you are inside the Docker container**. For easier debugging and use, its highly recommended to install the [VSCode Docker extension](https://code.visualstudio.com/docs/containers/overview), which allows you to start/stop the container and additionally attach VSCode to the container by right-clicking on the container and selecting `Attach Visual Studio Code`. If that isn't possible, you can re-enter the container running the following command:
+
+```bash
 enter_container.sh
 ```
 
@@ -129,26 +35,14 @@ enter_container.sh
 
 Run the following command in the root of the ROS workspace to build the package:
 
-```
-# TODO: Write me based on #2 below and any other necessary commands!
-```
-
-<a name="build_GACM_on_ROS"></a>
-
-## 2. Build GACM on ROS
-Clone the repository and catkin_make: (If [camera_model](https://github.com/hengli/camodocal) exists in your workspace, please remove it first)
 ```bash
-    cd ~/catkin_ws/src
-    git clone https://github.com/SYSU-RoboticsLab/GAC-Mapping.git
-    cd ../
-    catkin_make
+catkin_make
 ```
-
 
 
 <a name="run_GACM_dataset"></a>
 
-## 3. Run GACM on dataset
+## Run GACM on dataset
 
 We provide some sample data (including two ground sequences and one aerial sequence). In addition, we also provide configuration files for the [GrAco Dataset](https://sites.google.com/view/graco-dataset). You can also download the it for testing.
 
