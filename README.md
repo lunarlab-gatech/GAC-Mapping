@@ -73,7 +73,7 @@ roscore
 
   After testing, when using a 512-dimensional descriptor, the average thumbnail processing time is **0.007 seconds under GPU (NVIDIA TITAN X), and 0.085 seconds under CPU (i7-10710U)**.
   
-- Open a new terminal.
+- Open a new terminal. Make sure to edit `graco.launch` to use the right configs (based on the order you play your rosbags in).
 
   ```bash
   source ~/gac_mapping_ws/devel/setup.bash
@@ -82,17 +82,19 @@ roscore
 
   After the algorithm runs, you can choose whether to load the data file from `gacm_output\data\testSavemap` or not (see [Output file](#output_file) for details).  If you choose not to load, then you can play rosbag directly.
 
-  <div align="center">
-      <img src="./doc/notload.png" style="zoom:90%;" />
-  </div>
-
-
   If you choose to load, you need to wait for all data to be loaded. After loading, you can choose whether to perform pose graph optimization. **The optimization looks for new inter-robot loops based on the global coordinates of each submap.** If you think the mapping effect is good enough, or there are enough inter-robot loops, you don’t need to optimize it. Then you can play rosbag to run the algorithm.
 
-  <div align="center">
-      <img src="./doc/loaddata.png" style="zoom:90%;" />
-  </div>
+  ```bash
+  source ~/gac_mapping_ws/devel/setup.bash
+  cd ~/data/GrAco_dataset/V1.0/data/ground-06
+  rosbag play ground-06.bag
+  ```
 
+  ```bash
+  source ~/gac_mapping_ws/devel/setup.bash
+  cd ~/data/GrAco_dataset/V1.0/data/aerial-08
+  rosbag play aerial-08-25m.bag
+  ```
 
   After rosbag finishes, wait a moment (about 10 seconds), the algorithm will save data files and ask you whether to perform pose graph optimization.  However, if it's the end of the first sequence (robot id is 0), the pose graph optimization will not be performed by default. After optimization, the algorithm will save the odometry file. When all files are saved, you can run the next rosbag or exit directly.
 

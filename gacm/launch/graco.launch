@@ -5,9 +5,9 @@
     <!-- true: display in the camera frame; false: in the lidar frame -->
     <param name="/gacm/display_frame_cam" type="bool" value="false"/>
 
-    <arg name="config_path" default = "$(find gacm)/config/graco_ugv.yaml" />  <!-- ground-06 -->
-    <arg name="config_path1" default = "$(find gacm)/config/graco_ugv.yaml" />  <!-- ground-03 -->
-    <arg name="config_path2" default = "$(find gacm)/config/graco_uav.yaml" />   <!-- aerial-08 -->
+    <arg name="config_path" default = "$(find gacm)/config/graco_uav.yaml" />
+    <arg name="config_path1" default = "$(find gacm)/config/graco_uav.yaml" />
+    <arg name="config_path2" default = "$(find gacm)/config/graco_uav.yaml" /> 
     <arg name="config_path3" default = "$(find gacm)/config/graco_ugv.yaml" />
     <arg name="config_path4" default = "$(find gacm)/config/graco_ugv.yaml" />
     <arg name="gacm_path" default = "$(find gacm)/" />
