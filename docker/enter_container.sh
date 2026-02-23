@@ -1,0 +1,1 @@
+docker exec -it gac_mapping /bin/bash

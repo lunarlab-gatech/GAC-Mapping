@@ -42,11 +42,10 @@ RUN wget -q https://github.com/conda-forge/miniforge/releases/download/23.1.0-1/
     # Make conda/mamba available to all users in interactive bash shells
     echo '. /opt/conda/etc/profile.d/conda.sh' >> /etc/bash.bashrc
 
-# 4. Create the patchnetvlad conda environment (CPU build; swap pytorch-cpu →
-#    pytorch-gpu and add cudatoolkit if running under nvidia-docker)
+# 4. Create the patchnetvlad conda environment
 RUN /opt/conda/bin/mamba create -n patchnetvlad python=3.8 \
-        numpy pytorch-cpu torchvision natsort tqdm opencv pillow \
-        scikit-learn faiss matplotlib-base -c conda-forge -y && \
+        numpy pytorch torchvision torchaudio pytorch-cuda=12.1 natsort tqdm opencv pillow \
+        scikit-learn faiss matplotlib-base -c pytorch -c nvidia -c conda-forge -y && \
     /opt/conda/bin/conda run -n patchnetvlad \
         pip install --no-cache-dir pyyaml rospkg && \
     /opt/conda/bin/conda clean -afy
@@ -55,6 +54,11 @@ RUN /opt/conda/bin/mamba create -n patchnetvlad python=3.8 \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-melodic-pcl-ros \
     libpcl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 6. Install RViz (ROS visualization)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-melodic-rviz ros-melodic-image-transport-plugins \
     && rm -rf /var/lib/apt/lists/*
 
 # Set user arguments (being username, echo $UID, and id -g)

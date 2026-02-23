@@ -36,6 +36,7 @@ enter_container.sh
 Run the following command in the root of the ROS workspace to build the package:
 
 ```bash
+source /opt/ros/melodic/setup.bash
 catkin_make
 ```
 
@@ -50,14 +51,19 @@ We provide some sample data (including two ground sequences and one aerial seque
 
 ### Operation process
 
-- Open a terminal, run`roscore`.
+- Open a terminal, run:
+
+```bash
+source /opt/ros/melodic/setup.bash
+roscore
+```
 
 - Open a new terminal, run Patch-NetVLAD to extract feature.
 
   ```bash
   conda activate patchnetvlad
-  source ~/catkin_ws/devel/setup.bash
-  cd ~/catkin_ws/src/GAC-Mapping/Patch-NetVLAD
+  source ~/gac_mapping_ws/devel/setup.bash
+  cd ~/gac_mapping_ws/src/GAC-Mapping/Patch-NetVLAD
   python feature_extract_ros.py
   # use only cpu
   python feature_extract_ros.py --nocuda
@@ -70,8 +76,8 @@ We provide some sample data (including two ground sequences and one aerial seque
 - Open a new terminal.
 
   ```bash
-  source ~/catkin_ws/devel/setup.bash
-  roslaunch gacm gacm.launch
+  source ~/gac_mapping_ws/devel/setup.bash
+  roslaunch gacm graco.launch
   ```
 
   After the algorithm runs, you can choose whether to load the data file from `gacm_output\data\testSavemap` or not (see [Output file](#output_file) for details).  If you choose not to load, then you can play rosbag directly.

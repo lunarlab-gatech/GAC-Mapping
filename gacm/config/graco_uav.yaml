@@ -83,10 +83,10 @@ need_check_direction: 1 # On a drone, if your equipment (default is camera) Z ax
 
 # output odom para, tum format
 need_pub_odom: 1
-out_odom_path: /home/sysu-rapid/gacm_output/data/testSavemap/   # must end with "/"
+out_odom_path: /home/dbutterfield3/gac_mapping_ws/src/GAC-Mapping/results/GrAco/   # must end with "/"
 
 # for memory save
-cache_path: /home/sysu-rapid/gacm_output/cache/     # must end with "/"
+cache_path: /home/dbutterfield3/gac_mapping_ws/src/GAC-Mapping/results/GrAco/cache/     # must end with "/"
 
 # no use / deprecate
 gt_path: deprecate
